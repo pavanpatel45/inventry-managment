@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { customAlphabet } from 'nanoid';
 import { useSelector, useDispatch } from "react-redux";
 import { addOrder } from "../../features/orders/ordersSlice";
-import { useForm, useWatch } from "react-hook-form";
 import InputBox from "../../Components/InputBox";
 import NavbarForm from "../../Components/NavbarForm";
 import Dropdown from "../../Components/Dropdown";
@@ -9,64 +9,70 @@ import Dropdown from "../../Components/Dropdown";
 export default function CreateOrder() {
   const dispatch = useDispatch();
   const allOrders = useSelector((state) => state.orders);
+  const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+  const idLength = 10;
+  const generateUniqueId = customAlphabet(alphabet, idLength);
   console.log("all Orders at createOrder", allOrders);
   const [billingAddressCheck, setBillingAddressCheck] = useState(false);
   const [deliveryAddressCheck, setDeliveryAddressCheck] = useState(false);
   const [customerAddress, setCustomerAddress] = useState({});
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    control,
-    setValue,
-  } = useForm();
-  const onSubmit = (data) => {
-    console.log("inside onSubmit", data);
-
-    dispatch(addOrder(data));
-    reset();
-    setBillingAddressCheck(false);
-    setDeliveryAddressCheck(false);
-  };
-
-  const handleBillingCheckChange = (e) => {
-    setBillingAddressCheck(e.target.checked);
-    console.log("customerAddress:", customerAddress);
-    if (e.target.checked) {
-      setValue("paymentDetails.paymentAddress", customerAddress.Address);
-      setValue("paymentDetails.PostalCode", customerAddress.PostalCode);
-      setValue("paymentDetails.City", customerAddress.City);
-      setValue("paymentDetails.State", customerAddress.State);
-      setValue("paymentDetails.Country", customerAddress.Country);
-    } else {
-      setValue("paymentDetails.paymentAddress", "");
-      setValue("paymentDetails.PostalCode", "");
-      setValue("paymentDetails.City", "");
-      setValue("paymentDetails.State", "");
-      setValue("paymentDetails.Country", "");
-    }
-  };
-  const handleDeliveryCheckChange = (e) => {
-    setDeliveryAddressCheck(e.target.checked);
-    console.log("customerAddress:", customerAddress);
-    if (e.target.checked) {
-      setValue("shipmentDetails.Address", customerAddress.Address);
-      setValue("shipmentDetails.PostalCode", customerAddress.PostalCode);
-      setValue("shipmentDetails.City", customerAddress.City);
-      setValue("shipmentDetails.State", customerAddress.State);
-      setValue("shipmentDetails.Country", customerAddress.Country);
-    } else {
-      setValue("shipmentDetails.Address", "");
-      setValue("shipmentDetails.PostalCode", "");
-      setValue("shipmentDetails.City", "");
-      setValue("shipmentDetails.State", "");
-      setValue("shipmentDetails.Country", "");
-    }
+  const [formData, setFormData] = useState({
+    status: 1,
+    id: '',
+    customerDetails: {
+      Address: "",
+      City: "",
+      Country: " ",
+      PostalCode: " ",
+      State: " ",
+      customerName: " ",
+      email: " ",
+      mobileNumber: "",
+    },
+    orderDetails: {
+      Location: "",
+      Note: "",
+      receivedDate: "",
+    },
+    paymentDetails: {
+      City: "",
+      Country: "",
+      PostalCode: "",
+      State: "",
+      amount: "",
+      cardHolderName: "",
+      cardNo: "",
+      paymentAddress: "",
+      paymentDate: "",
+      paymentMethod: "",
+      paymentStatus: "",
+    },
+    productDetails: {
+      Name: "",
+      code: "",
+      price: "",
+      quantity: "",
+    },
+    shipmentDetails: {
+      Address: "",
+      City: "",
+      Country: "",
+      PostalCode: "",
+      State: "",
+      deliveryDate: "",
+    },
+  });
+  const handleBillingCheckChange = (e) => {};
+  const handleDeliveryCheckChange = (e) => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    formData.id =  generateUniqueId();
+    console.log("data at submit", formData);
+    dispatch(addOrder(formData));
   };
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="p-3">
+    <form onSubmit={handleSubmit}>
+      <div className="p-3 bg-white pb-4">
         <NavbarForm title="Create Order" />
         <div className="grid gap-y-4">
           {/* Order Details Block Start */}
@@ -77,38 +83,47 @@ export default function CreateOrder() {
                 type="date"
                 title="Received Date*"
                 name="orderDetails.receivedDate"
-                category="orderDetails"
-                field="receivedDate"
-                required
-                errors={errors}
-                register={register("orderDetails.receivedDate", {
-                  // required: "Hey, you forgot to enter the received date!",
-                })}
+                value={formData.orderDetails.receivedDate}
+                onChange={(e) =>
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    orderDetails: {
+                      ...prevData.orderDetails,
+                      receivedDate: e.target.value,
+                    },
+                  }))
+                }
               />
 
               <Dropdown
                 title="Order Location*"
                 name="orderDetails.Location"
-                errors={errors}
-                category="orderDetails"
-                field="Location"
-                required
-                register={register("orderDetails.Location", {
-                  // required: "Hey, you forgot to enter the Order Location!",
-                })}
+                value={formData.orderDetails.Location}
+                onChange={(e) =>
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    orderDetails: {
+                      ...prevData.orderDetails,
+                      Location: e.target.value,
+                    },
+                  }))
+                }
               />
               <InputBox
                 type="text"
                 title="Order Note*"
                 className="md:col-span-3"
                 name="orderDetails.Note"
-                errors={errors}
-                category="orderDetails"
-                required
-                field="Note"
-                register={register("orderDetails.Note", {
-                  // required: "Hey, you forgot to enter the order Note!",
-                })}
+                value={formData.orderDetails.Note}
+                onChange={(e) =>
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    orderDetails: {
+                      ...prevData.orderDetails,
+                      Note: e.target.value,
+                    },
+                  }))
+                }
               />
             </div>
           </div>
@@ -120,59 +135,63 @@ export default function CreateOrder() {
               <Dropdown
                 title="Name*"
                 name="productDetails.Name"
-                category="productDetails"
-                field="Name"
-                errors={errors}
-                required
-                register={register("productDetails.Name", {
-                  // required: "Hey, you forgot to enter the Name!",
-                })}
+                value={formData.productDetails.Name}
+                onChange={(e) =>
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    productDetails: {
+                      ...prevData.productDetails,
+                      Name: e.target.value,
+                    },
+                  }))
+                }
               />
               <InputBox
                 type="text"
                 title="Code"
                 name="productDetails.code"
-                category="productDetails"
-                field="code"
-                placeholder=""
-                errors={errors}
-                register={register("productDetails.code", {
-                  // required: "Hey, you forgot to enter the Code!",
-                })}
+                value={formData.productDetails.code}
+                onChange={(e) =>
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    productDetails: {
+                      ...prevData.productDetails,
+                      code: e.target.value,
+                    },
+                  }))
+                }
               />
               <InputBox
                 type="number"
                 title="Quantity*"
-                onChange={(e) => {
-                  if (e.target.value < 0) {
-                    e.target.value = 0;
-                  }
-                }}
                 name="productDetails.quantity"
-                category="productDetails"
-                field="quantity"
-                required
-                errors={errors}
-                register={register("productDetails.quantity", {
-                  // required: "Hey, you forgot to enter the Quantity!",
-                })}
+                value={formData.productDetails.quantity}
+                onChange={(e) => {
+                  const value = Math.max(0, e.target.value);
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    productDetails: {
+                      ...prevData.productDetails,
+                      quantity: value,
+                    },
+                  }));
+                }}
               />
               <InputBox
                 type="number"
                 title="Price*"
-                onChange={(e) => {
-                  if (e.target.value < 0) {
-                    e.target.value = 0;
-                  }
-                }}
                 name="productDetails.price"
-                category="productDetails"
-                field="price"
-                required
-                errors={errors}
-                register={register("productDetails.price", {
-                  // required: "Hey, you forgot to enter the Price",
-                })}
+                value={formData.productDetails.price}
+                onChange={(e) => {
+                  const value = Math.max(0, e.target.value);
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    productDetails: {
+                      ...prevData.productDetails,
+                      price: value,
+                    },
+                  }));
+                }}
               />
             </div>
           </div>
@@ -185,143 +204,124 @@ export default function CreateOrder() {
                 type="text"
                 title="Customer Name*"
                 name="customerDetails.customerName"
-                category="customerDetails"
-                field="customerName"
-                required
-                errors={errors}
-                register={register("customerDetails.customerName", {
-                  // required: "Hey, you forgot to enter the Customer Name!",
-                })}
+                value={formData.customerDetails.customerName}
+                onChange={(e) =>
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    customerDetails: {
+                      ...prevData.customerDetails,
+                      customerName: e.target.value,
+                    },
+                  }))
+                }
               />
               <InputBox
                 type="email"
                 title="Email*"
                 name="customerDetails.email"
-                category="customerDetails"
-                field="email"
-                required
-                errors={errors}
-                register={register("customerDetails.email", {
-                  // required: "Hey, you forgot to enter the Email!",
-                  pattern: {
-                    value: /^\S+@\S+\.\S+$/i,
-                    message: "Oops! Please enter a valid email address.",
-                  },
-                })}
+                value={formData.customerDetails.email}
+                onChange={(e) =>
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    customerDetails: {
+                      ...prevData.customerDetails,
+                      email: e.target.value,
+                    },
+                  }))
+                }
               />
               <InputBox
                 type="number"
                 title="Mobile Number*"
-                onChange={(e) => {
-                  if (e.target.value < 0) {
-                    e.target.value = 0;
-                  }
-                }}
                 name="customerDetails.mobileNumber"
-                category="customerDetails"
-                field="mobileNumber"
-                errors={errors}
-                required
-                register={register("customerDetails.mobileNumber", {
-                  // required: "Hey, you forgot to enter the Mobile Number!",
-                  pattern: {
-                    value: /^\d{10}$/,
-                    message:
-                      "Oops! Please enter a valid 10 digit Mobile Number",
-                  },
-                })}
+                value={formData.customerDetails.mobileNumber}
+                onChange={(e) => {
+                  const value = Math.max(0, e.target.value); // Ensure non-negative value
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    customerDetails: {
+                      ...prevData.customerDetails,
+                      mobileNumber: value,
+                    },
+                  }));
+                }}
               />
               <InputBox
                 type="text"
                 title="Address Line*"
                 className="md:col-span-2"
                 name="customerDetails.Address"
-                category="customerDetails"
-                field="Address"
+                value={formData.customerDetails.Address}
                 onChange={(e) => {
-                  setCustomerAddress((prevData) => ({
+                  setFormData((prevData) => ({
                     ...prevData,
-                    Address: e.target.value,
+                    customerDetails: {
+                      ...prevData.customerDetails,
+                      Address: e.target.value,
+                    },
                   }));
                 }}
-                required
-                errors={errors}
-                register={register("customerDetails.Address", {
-                  // required: "Hey, you forgot to enter the Address!",
-                })}
               />
+
               <InputBox
                 type="number"
                 title="Zip/Postal Code*"
                 name="customerDetails.PostalCode"
-                category="customerDetails"
-                field="PostalCode"
-                required
+                value={formData.customerDetails.PostalCode}
                 onChange={(e) => {
-                  setCustomerAddress((prevData) => ({
+                  setFormData((prevData) => ({
                     ...prevData,
-                    PostalCode: e.target.value,
+                    customerDetails: {
+                      ...prevData.customerDetails,
+                      PostalCode: e.target.value,
+                    },
                   }));
                 }}
-                errors={errors}
-                register={register("customerDetails.PostalCode", {
-                  // required: "Hey, you forgot to enter the Zip/Postal Code!",
-                  pattern: {
-                    value: /^\d{6}$/,
-                    message: "Oops! Please enter a valid 6 digit Postal Code",
-                  },
-                })}
               />
+
               <Dropdown
                 title="City*"
                 name="customerDetails.City"
-                category="customerDetails"
-                field="City"
-                required
+                value={formData.customerDetails.City}
                 onChange={(e) => {
-                  setCustomerAddress((prevData) => ({
+                  setFormData((prevData) => ({
                     ...prevData,
-                    City: e.target.value,
+                    customerDetails: {
+                      ...prevData.customerDetails,
+                      City: e.target.value,
+                    },
                   }));
                 }}
-                errors={errors}
-                register={register("customerDetails.City", {
-                  // required: "Hey, you forgot to enter the City!",
-                })}
               />
+
               <Dropdown
                 title="State*"
                 name="customerDetails.State"
-                category="customerDetails"
-                field="State"
-                required
+                value={formData.customerDetails.State}
                 onChange={(e) => {
-                  setCustomerAddress((prevData) => ({
+                  setFormData((prevData) => ({
                     ...prevData,
-                    State: e.target.value,
+                    customerDetails: {
+                      ...prevData.customerDetails,
+                      State: e.target.value,
+                    },
                   }));
                 }}
-                errors={errors}
-                register={register("customerDetails.State", {
-                  // required: "Hey, you forgot to enter the State!",
-                })}
               />
+
               <Dropdown
                 title="Country*"
                 name="customerDetails.Country"
-                category="customerDetails"
-                field="Country"
-                required
+                value={formData.customerDetails.Country}
                 onChange={(e) => {
-                  setCustomerAddress((prevData) => ({
+                  setFormData((prevData) => ({
                     ...prevData,
-                    Country: e.target.value,
+                    customerDetails: {
+                      ...prevData.customerDetails,
+                      Country: e.target.value,
+                    },
                   }));
                 }}
-                errors={errors}
-                register={register("customerDetails.Country", {
-                  // required: "Hey, you forgot to enter the Country!",
-                })}
               />
             </div>
           </div>
@@ -336,162 +336,183 @@ export default function CreateOrder() {
                 checked={billingAddressCheck}
                 onChange={handleBillingCheckChange}
               />
-               Billing Address Same as Customer Address
+              Billing Address Same as Customer Address
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 grid-flow-row gap-x-8 gap-y-8">
               <Dropdown
                 title="Payment Method*"
                 options={["Credit Card", "Debit Card"]}
                 name="paymentDetails.paymentMethod"
-                category="paymentDetails"
-                field="paymentMethod"
-                required
-                errors={errors}
-                register={register("paymentDetails.paymentMethod", {
-                  // required: "Hey, you forgot to enter the Payment Method!",
-                })}
+                value={formData.paymentDetails.paymentMethod}
+                onChange={(e) =>
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    paymentDetails: {
+                      ...prevData.paymentDetails,
+                      paymentMethod: e.target.value,
+                    },
+                  }))
+                }
               />
+
               <InputBox
                 type="number"
                 title="Card No*"
-                onChange={(e) => {
-                  if (e.target.value < 0) {
-                    e.target.value = 0;
-                  }
-                }}
                 name="paymentDetails.cardNo"
-                category="paymentDetails"
-                field="cardNo"
-                required
-                errors={errors}
-                register={register("paymentDetails.cardNo", {
-                  // required: "Hey, you forgot to enter the Card No.!",
-                  pattern: {
-                    value: /^\d{16}$/,
-                    message:
-                      "Oops! Please enter a valid credit card number in the format xxxx-xxxx-xxxx-xxxx",
-                  },
-                })}
+                value={formData.paymentDetails.cardNo}
+                onChange={(e) => {
+                  const value = Math.max(0, e.target.value); // Ensure non-negative value
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    paymentDetails: {
+                      ...prevData.paymentDetails,
+                      cardNo: value,
+                    },
+                  }));
+                }}
               />
+
               <InputBox
                 type="text"
                 title="Card Holder Name*"
                 name="paymentDetails.cardHolderName"
-                category="paymentDetails"
-                field="cardHolderName"
-                required
-                errors={errors}
-                register={register("paymentDetails.cardHolderName", {
-                  // required: "Hey, you forgot to enter the Card Holder Name!",
-                })}
+                value={formData.paymentDetails.cardHolderName}
+                onChange={(e) =>
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    paymentDetails: {
+                      ...prevData.paymentDetails,
+                      cardHolderName: e.target.value,
+                    },
+                  }))
+                }
               />
+
               <Dropdown
                 title="Payment Status*"
                 name="paymentDetails.paymentStatus"
-                category="paymentDetails"
-                field="paymentStatus"
-                options={["Paid", "Not Paid"]}
-                required
-                errors={errors}
-                register={register("paymentDetails.paymentStatus", {
-                  // required: "Hey, you forgot to enter the Payment Status!",
-                })}
+                value={formData.paymentDetails.paymentStatus}
+                onChange={(e) =>
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    paymentDetails: {
+                      ...prevData.paymentDetails,
+                      paymentStatus: e.target.value,
+                    },
+                  }))
+                }
               />
+
               <InputBox
                 type="date"
                 title="Payment Date*"
                 name="paymentDetails.paymentDate"
-                category="paymentDetails"
-                field="paymentDate"
-                required
-                errors={errors}
-                register={register("paymentDetails.paymentDate", {
-                  // required: "Hey, you forgot to enter the Payment date!",
-                })}
+                value={formData.paymentDetails.paymentDate}
+                onChange={(e) =>
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    paymentDetails: {
+                      ...prevData.paymentDetails,
+                      paymentDate: e.target.value,
+                    },
+                  }))
+                }
               />
+
               <InputBox
                 type="number"
                 title="Amount*"
-                onChange={(e) => {
-                  if (e.target.value < 0) {
-                    e.target.value = 0;
-                  }
-                }}
                 name="paymentDetails.amount"
-                category="paymentDetails"
-                field="amount"
-                required
-                errors={errors}
-                register={register("paymentDetails.amount", {
-                  // required: "Hey, you forgot to enter the Amount!",
-                })}
+                value={formData.paymentDetails.amount}
+                onChange={(e) => {
+                  const value = Math.max(0, e.target.value); // Ensure non-negative value
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    paymentDetails: {
+                      ...prevData.paymentDetails,
+                      amount: value,
+                    },
+                  }));
+                }}
               />
+
               <InputBox
                 type="text"
                 title="Address Line*"
                 className="md:col-span-2"
                 name="paymentDetails.paymentAddress"
-                category="paymentDetails"
-                field="paymentAddress"
-                required
-                errors={errors}
-                register={register("paymentDetails.paymentAddress", {
-                  // required: "Hey, you forgot to enter the Address!",
-                })}
+                value={formData.paymentDetails.paymentAddress}
+                onChange={(e) =>
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    paymentDetails: {
+                      ...prevData.paymentDetails,
+                      paymentAddress: e.target.value,
+                    },
+                  }))
+                }
               />
+
               <InputBox
                 type="number"
                 title="Zip/Postal Code*"
-                onChange={(e) => {
-                  if (e.target.value < 0) {
-                    e.target.value = 0;
-                  }
-                }}
                 name="paymentDetails.PostalCode"
-                category="paymentDetails"
-                field="PostalCode"
-                required
-                errors={errors}
-                register={register("paymentDetails.PostalCode", {
-                  // required: "Hey, you forgot to enter the Zip/Postal Code!",
-                  pattern: {
-                    value: /^\d{6}$/,
-                    message: "Oops! Please enter a valid 6 digit Postal Code",
-                  },
-                })}
+                value={formData.paymentDetails.PostalCode}
+                onChange={(e) => {
+                  const value = Math.max(0, e.target.value); // Ensure non-negative value
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    paymentDetails: {
+                      ...prevData.paymentDetails,
+                      PostalCode: value,
+                    },
+                  }));
+                }}
               />
+
               <Dropdown
                 title="City*"
                 name="paymentDetails.City"
-                category="paymentDetails"
-                field="City"
-                required
-                errors={errors}
-                register={register("paymentDetails.City", {
-                  // required: "Hey, you forgot to enter the City!",
-                })}
+                value={formData.paymentDetails.City}
+                onChange={(e) =>
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    paymentDetails: {
+                      ...prevData.paymentDetails,
+                      City: e.target.value,
+                    },
+                  }))
+                }
               />
+
               <Dropdown
                 title="State*"
                 name="paymentDetails.State"
-                category="paymentDetails"
-                field="State"
-                required
-                errors={errors}
-                register={register("paymentDetails.State", {
-                  // required: "Hey, you forgot to enter the State!",
-                })}
+                value={formData.paymentDetails.State}
+                onChange={(e) =>
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    paymentDetails: {
+                      ...prevData.paymentDetails,
+                      State: e.target.value,
+                    },
+                  }))
+                }
               />
+
               <Dropdown
                 title="Country*"
                 name="paymentDetails.Country"
-                category="paymentDetails"
-                field="Country"
-                required
-                errors={errors}
-                register={register("paymentDetails.Country", {
-                  // required: "Hey, you forgot to enter the Country!",
-                })}
+                value={formData.paymentDetails.Country}
+                onChange={(e) =>
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    paymentDetails: {
+                      ...prevData.paymentDetails,
+                      Country: e.target.value,
+                    },
+                  }))
+                }
               />
             </div>
           </div>
@@ -513,80 +534,95 @@ export default function CreateOrder() {
                 type="date"
                 title="Delivery Date*"
                 name="shipmentDetails.deliveryDate"
-                category="shipmentDetails"
-                field="deliveryDate"
-                required
-                errors={errors}
-                register={register("shipmentDetails.deliveryDate", {
-                  // required: "Hey, you forgot to enter the Delivery date!",
-                })}
+                value={formData.shipmentDetails.deliveryDate}
+                onChange={(e) =>
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    shipmentDetails: {
+                      ...prevData.shipmentDetails,
+                      deliveryDate: e.target.value,
+                    },
+                  }))
+                }
               />
+
               <InputBox
                 type="text"
                 title="Address Line*"
                 className="md:col-span-2"
                 name="shipmentDetails.Address"
-                category="shipmentDetails"
-                field="Address"
-                required
-                errors={errors}
-                register={register("shipmentDetails.Address", {
-                  // required: "Hey, you forgot to enter the Address!",
-                })}
+                value={formData.shipmentDetails.Address}
+                onChange={(e) =>
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    shipmentDetails: {
+                      ...prevData.shipmentDetails,
+                      Address: e.target.value,
+                    },
+                  }))
+                }
               />
+
               <InputBox
                 type="number"
                 title="Zip/Postal Code*"
-                onChange={(e) => {
-                  if (e.target.value < 0) {
-                    e.target.value = 0;
-                  }
-                }}
                 name="shipmentDetails.PostalCode"
-                category="shipmentDetails"
-                field="PostalCode"
-                required
-                errors={errors}
-                register={register("shipmentDetails.PostalCode", {
-                  // required: "Hey, you forgot to enter the Zip/Postal Code!",
-                  pattern: {
-                    value: /^\d{6}$/,
-                    message: "Oops! Please enter a valid 6 digit Postal Code",
-                  },
-                })}
+                value={formData.shipmentDetails.PostalCode}
+                onChange={(e) => {
+                  const value = Math.max(0, e.target.value); // Ensure non-negative value
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    shipmentDetails: {
+                      ...prevData.shipmentDetails,
+                      PostalCode: value,
+                    },
+                  }));
+                }}
               />
+
               <Dropdown
                 title="City*"
                 name="shipmentDetails.City"
-                category="shipmentDetails"
-                field="City"
-                required
-                errors={errors}
-                register={register("shipmentDetails.City", {
-                  // required: "Hey, you forgot to enter the City!",
-                })}
+                value={formData.shipmentDetails.City}
+                onChange={(e) =>
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    shipmentDetails: {
+                      ...prevData.shipmentDetails,
+                      City: e.target.value,
+                    },
+                  }))
+                }
               />
+
               <Dropdown
                 title="State*"
                 name="shipmentDetails.State"
-                category="shipmentDetails"
-                field="State"
-                required
-                errors={errors}
-                register={register("shipmentDetails.State", {
-                  // required: "Hey, you forgot to enter the State!",
-                })}
+                value={formData.shipmentDetails.State}
+                onChange={(e) =>
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    shipmentDetails: {
+                      ...prevData.shipmentDetails,
+                      State: e.target.value,
+                    },
+                  }))
+                }
               />
+
               <Dropdown
                 title="Country*"
                 name="shipmentDetails.Country"
-                category="shipmentDetails"
-                field="Country"
-                required
-                errors={errors}
-                register={register("shipmentDetails.Country", {
-                  // required: "Hey, you forgot to enter the Country!",
-                })}
+                value={formData.shipmentDetails.Country}
+                onChange={(e) =>
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    shipmentDetails: {
+                      ...prevData.shipmentDetails,
+                      Country: e.target.value,
+                    },
+                  }))
+                }
               />
             </div>
           </div>

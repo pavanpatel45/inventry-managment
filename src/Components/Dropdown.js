@@ -2,11 +2,7 @@ import React,{useState} from "react";
 export default function Dropdown({
   title,
   name,
-  register,
-  errors,
   options,
-  category,
-  field,
   ...props
 }) {
 
@@ -16,7 +12,6 @@ export default function Dropdown({
       <select
         className="p-2 rounded-md"
         id={name}
-        {...register}
         {...props}
         style={{border:"1px solid #999999",color:"#2D2D2D"}}
       >
@@ -29,7 +24,7 @@ export default function Dropdown({
           </>
         ) : (
           <>
-            <option default className="hidden"></option>
+            <option  disabled selected hidden></option>
             <option>option1</option>
             <option>option2</option>
             <option>option3</option>
@@ -39,11 +34,9 @@ export default function Dropdown({
           </>
         )}
       </select>
-      <label for="title" className="relative top-3 left-3 bg-white max-w-max" style={{color:"#808080"}}>
+      <label for="title" className="relative top-3 left-3 bg-white max-w-max" style={{color:"#808080" ,top:"-8px" ,left:"22px"}}>
         {title}
       </label>
-      {/* {console.log("errors[name] : ",errors[name] , "name :",name)} */}
-      {errors[category] && errors[category][field] && <span>{errors[category][field].message}</span>}
     </div>
   );
 }

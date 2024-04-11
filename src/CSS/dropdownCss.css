@@ -1,3 +1,9 @@
+body{
+  background-color: #f3f3f3;
+  user-select: none;
+  -moz-user-select: none;  
+  -ms-user-select: none;
+}
 .select-box-1 select {
     appearance: none;  
     -webkit-appearance: none;  
@@ -44,21 +50,34 @@
     pointer-events: none;
     transition: 0.5s;
   }
-
-  .floating-label input:valid ~label,
-  .floating-label input:focus ~label{
-    transform: translateX(10px) translateY(-20px);
-  }
  
-  .floating-label select:valid ~label,
-  .floating-label select:focus ~label{
-    transform: translateX(10px) translateY(-20px);
+  .orderBoxButton:hover{
+    background-color:#2CAE66;
+    color:white !important;
   }
-  
-  /* .floating-label input:not(:placeholder-shown) {
-    background-color: blue;
-  }  */
-  .floating-label input:placeholder-shown:not(:focus) ~label{
-    /* background-color: blue; */
-    transform: translateX(0px) translateY(0px);
-  } 
+  .dialogBoxText:hover{
+    background-color: #DDF8E9;
+    color: #2d2d2d !important;
+  }
+  .dialogBoxCancelButton:hover{
+    background-color:#EC3030;
+    color:white !important;
+  }
+  .navbarSalesButton:hover{
+    background-color:#2CAE66         !important;
+    color:white !important;
+  }
+  .scrollbar::-webkit-scrollbar {
+    width: 0;   
+    background: transparent;  
+}
+ 
+.scrollbar::-webkit-scrollbar-thumb {
+    background: #FF0000;
+}
+.even-row:hover {
+  background-color: #E2FFE5; 
+}
+a.action{
+  border:1px solid black;
+}

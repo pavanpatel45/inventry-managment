@@ -1,12 +1,9 @@
 import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import {changeStatus } from  "../features/orders/ordersSlice";
+import {Link} from 'react-router-dom'
 import uparrow from "../Icons/up-arrow.png";
 import downarrow from "../Icons/down-arrow.png";
 import productImg from "../Icons/product.png";
-import { Link } from "react-router-dom";
-export default function OrderBox({ order, key }) {
-  const dispatch = useDispatch();
+export default function OrderBox({ order, key, handleChangeStatus }) {
   const [isOpen, setIsOpen] = useState(false);
   function handleOpenBox() {
     if (isOpen) {
@@ -14,10 +11,6 @@ export default function OrderBox({ order, key }) {
     } else {
       setIsOpen(true);
     }
-  }
-  const handleCancelledOrder = () =>{
-    const status = 6;
-    dispatch(changeStatus({id:order.id,status}))
   }
   return (
     <div
@@ -43,7 +36,7 @@ export default function OrderBox({ order, key }) {
               Order Quantity: {order.productDetails.quantity}
             </div>
             <div className="text-xs font-normal" style={{ color: "#2D2D2D" }}>
-              {order.productDetails.Name}
+              Paracetamol 500mg Capsules
             </div>
           </div>
         </div>
@@ -57,7 +50,7 @@ export default function OrderBox({ order, key }) {
       </div>
       <div className=" flex justify-between items-center">
         <div className="text-xs font-normal" style={{ color: "#666666" }}>
-          Received On {order.orderDetails.receivedDate}
+          Received On 06 Jun 2024
         </div>
         <div className="flex flex-row items-center gap-2">
           <div
@@ -71,86 +64,55 @@ export default function OrderBox({ order, key }) {
       </div>
       {isOpen && (
         <div className="grid gap-2">
-          <div className="flex flex-row">
+          <div>
             <div className="text-xs font-medium" style={{ color: "#2D2D2D" }}>
               Order by :
             </div>
-            <div className="text-xs font-normal" style={{ color: "#2D2D2D" }}>
-              {order.customerDetails.customerName}
-            </div>
+            <div
+              className="text-xs font-normal"
+              style={{ color: "#2D2D2D" }}
+            ></div>
           </div>
-          <div className="flex flex-row">
+          <div>
             <div className="text-xs font-medium" style={{ color: "#2D2D2D" }}>
-              Location :
-            </div>
-            <div className="text-xs font-normal" style={{ color: "#2D2D2D" }}>
-              {order.orderDetails.Location}
-            </div>
-          </div>
-          <div className="flex justify-between">
-            <div className="flex gap-1 flex-col">
-              <div className="text-xs font-medium" style={{ color: "#696969" }}>
-                Available
-              </div>
-              <div className="text-sm font-medium" style={{ color: "#2D2D2D" }}>
-                300
-              </div>
-            </div>
-            <div className="flex gap-1 flex-col">
-              <div className="text-xs font-medium" style={{ color: "#696969" }}>
-                Producible
-              </div>
-              <div className="text-sm font-medium" style={{ color: "#2D2D2D" }}>
-                150
-              </div>
-            </div>
-            <div className="flex gap-1 flex-col">
-              <div className="text-xs font-medium" style={{ color: "#696969" }}>
-                Unavailable
-              </div>
-              <div className="text-sm font-medium" style={{ color: "#2D2D2D" }}>
-                50
-              </div>
-            </div>
-          </div>
-          <div className="leading-4">
-            <div
-              className="text-xs font-medium inline"
-              style={{ color: "#2D2D2D" }}
-            >
-              {" "}
-              Order Note:
+              Est. Delivery Date :
             </div>
             <div
-              className="text-xs font-normal inline"
+              className="text-xs font-normal"
               style={{ color: "#2D2D2D" }}
-            >
-              {order.orderDetails.Note}
-            </div>
+            ></div>
           </div>
-          <div className="grid grid-cols-2 text-center">
-         
+          <div>
+            <div className="text-xs font-medium" style={{ color: "#2D2D2D" }}>
+              Order Id :
+            </div>
+            <div
+              className="text-xs font-normal"
+              style={{ color: "#2D2D2D" }}
+            ></div>
+          </div>
+          <div
+            className={`grid grid-cols-${
+              handleChangeStatus ? "2" : "1"
+            } text-center`}
+          >
             <button
-              className="  my-2 mx-2 py-2  rounded-md orderBoxButton "
+              className="  my-1 mx-1 py-2 rounded-md orderBoxButton "
               style={{ border: "1px solid #2CAE66", color: "#2CAE66" }}
-              onClick={handleCancelledOrder}
             >
-               <Link to="/sales/Cancelled"> Cancel Order</Link>
-             
-            </button>
-            
-              <button
-                className=" my-2 mx-2 py-2  rounded-md orderBoxButton"
-                style={{ border: "1px solid #2CAE66", color: "#2CAE66" }}
-              >
-                <Link
-               to="/sales/viewOrder"
-               state={order}
-            > 
+              <Link to="/sales/viewOrder" state={order}>
                 View Order
-                </Link>
+              </Link>
+            </button>
+            {handleChangeStatus && (
+              <button
+                className=" my-1 mx-1 py-2 rounded-md orderBoxButton  "
+                style={{ border: "1px solid #2CAE66", color: "#2CAE66" }}
+                onClick={() => handleChangeStatus({ id: order.id })}
+              >
+                Change Status
               </button>
-           
+            )}
           </div>
         </div>
       )}
