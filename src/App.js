@@ -24,6 +24,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import MaterialView from "./pages/Material/MaterialView";
 import RootLayout from "./Layout/RootLayout";
 import SalesLayout from "./Layout/SalesLayout";
+import PurchaseOrder from './Components/PurchaseOrder'
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -36,6 +38,7 @@ const router = createBrowserRouter(
             <Route path="Completed" element={<CompletedOrder  />} />
             <Route path="Cancelled" element={<CancelledOrder  />} />
        </Route>
+       <Route path="sales/purchaseOrder" element={<PurchaseOrder/>}/>
        <Route path="viewOrder" element={<ViewOrder/>}/>
        <Route path="materials" element={<MaterialView/>}/>
        
