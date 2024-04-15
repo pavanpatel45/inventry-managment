@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from './Button'
 import {Link} from 'react-router-dom'
-export default function NavbarInner({title}) {
+export default function NavbarInner({title, btnTitle}) {
   return (
     <div className='flex flex-row justify-between items-center'>
        <div className='flex flex-row gap-2 ' style={{font:"16px"}}>
@@ -9,7 +9,7 @@ export default function NavbarInner({title}) {
            <div style={{color:"#2D2D2D"}}>{title}</div>
        </div>
        <div className='flex flex-box'>
-           <Button btnTitle="Save"/>
+           <Button btnTitle={btnTitle}/>
        </div>
     </div>
   )
