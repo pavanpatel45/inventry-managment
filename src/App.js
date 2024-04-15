@@ -27,6 +27,7 @@ import SalesLayout from "./Layout/SalesLayout";
 import CreateBatch from './pages/Material/CreateBatch'
 import AddNewMaterial from "./pages/Material/AddNewMaterial";
 import ProductView from "./pages/Product/ProductView";
+import PurchaseOrder from './Components/PurchaseOrder'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
@@ -39,6 +40,7 @@ const router = createBrowserRouter(
             <Route path="Completed" element={<CompletedOrder  />} />
             <Route path="Cancelled" element={<CancelledOrder  />} />
        </Route>
+       <Route path="sales/purchaseOrder" element={<PurchaseOrder/>}/>
        <Route path="sales/viewOrder" element={<ViewOrder/>}/>
        <Route path="materials" >
             <Route index element={<MaterialView/>}/>
