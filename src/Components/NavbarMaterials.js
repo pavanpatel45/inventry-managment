@@ -5,19 +5,25 @@ import search from '../Icons/search.png'
 import exprt from '../Icons/export.png'
 import loc from '../Icons/location.png'
 import downArrow from '../Icons/down-arrow.png'
+import {  toast } from "react-toastify";
+
+
 export default function NavbarMaterials({
-  className,
+  className,title
 }) {
   const [exportOption, setExportOption] = useState("");
 
   const handleChange = (e) => {
     setExportOption(e.target.value);
   };
+
+  const notify = () => toast.success("Purchase Order Successfully Created" );
+
   return (
     <div className="flex flex-row justify-between items-center  mt-8">
       <div className="flex flex-row gap-2 ml-4">
         <div>&larr;</div>
-        <div className="font-medium">Materials View</div>
+        <div className="font-medium">{title}</div>
       </div>
 
       <div className="flex justify-end">
@@ -74,6 +80,7 @@ export default function NavbarMaterials({
 
         <Button
           btnTitle={"Add +"}
+          onClick={notify}
           // className="p-2 border-1 border-solid border-black rounded-md pt-0 pb-0"
           // style={buttonStyle}
         />
