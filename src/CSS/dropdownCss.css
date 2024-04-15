@@ -81,3 +81,8 @@ body{
 a.action{
   border:1px solid black;
 }
+
+.dropHover:hover{
+  background-color: #E2FFE5;
+  color:black
+}
