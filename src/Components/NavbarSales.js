@@ -14,7 +14,7 @@ export default function NavbarSales({title,handleCreateOrder}) {
              <div className='rounded-full w-8 h-8 flex items-center justify-center navbarSalesButton' style={{backgroundColor:"#EFEFEF"}}><img src={search} height="16px" width="16px"/></div>
              <div className='rounded-full w-8 h-8 flex items-center justify-center navbarSalesButton' style={{backgroundColor:"#EFEFEF"}}><img  src={location} height="12px" width="12px"/></div>
              <div className='rounded-full w-8 h-8 flex items-center justify-center navbarSalesButton' style={{backgroundColor:"#EFEFEF"}}><img  src={data} height="12px" width="12px"/></div>
-             <Link to="/createOrder">
+             <Link to="/sales/createOrder">
              <div className='rounded-full w-8 h-8 text-2xl flex items-top justify-center navbarSalesButton' style={{backgroundColor:"#EFEFEF",color:"#5A5A5A" ,alignItems:"center"}} ><span className='pb-2'>+</span></div>
              </Link>
         </div>

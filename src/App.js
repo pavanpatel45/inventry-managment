@@ -39,6 +39,7 @@ const router = createBrowserRouter(
             <Route path="Completed" element={<CompletedOrder  />} />
             <Route path="Cancelled" element={<CancelledOrder  />} />
        </Route>
+       <Route path="sales/createOrder" element={<CreateOrder/>}/>
        <Route path="sales/viewOrder" element={<ViewOrder/>}/>
        <Route path="materials" >
             <Route index element={<MaterialView/>}/>

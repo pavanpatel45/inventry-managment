@@ -73,7 +73,7 @@ export default function CreateOrder() {
   return (
     <form onSubmit={handleSubmit}>
       <div className="p-3 bg-white pb-4">
-        <NavbarForm title="Create Order" />
+        <NavbarForm title="Create Order" btnTitle="Save" />
         <div className="grid gap-y-4">
           {/* Order Details Block Start */}
           <div className="grid gap-2">
