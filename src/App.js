@@ -19,12 +19,13 @@ import MakeOrder from './Components/MakeOrder'
 import ShippedOrder from "./Components/ShippedOrder";
 import CompletedOrder from "./Components/CompletedOrder";
 import CancelledOrder from "./Components/CancelledOrder";
-import { ToastContainer, toast } from 'react-toastify';
-  import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import MaterialView from "./pages/Material/MaterialView";
 import RootLayout from "./Layout/RootLayout";
 import SalesLayout from "./Layout/SalesLayout";
 import PurchaseOrder from './Components/PurchaseOrder'
+import PurchaseOrderCreation from "./Components/PurchaseOrderCreation";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -38,7 +39,9 @@ const router = createBrowserRouter(
             <Route path="Completed" element={<CompletedOrder  />} />
             <Route path="Cancelled" element={<CancelledOrder  />} />
        </Route>
-       <Route path="sales/purchaseOrder" element={<PurchaseOrder/>}/>
+       <Route path="sales/purchaseOrder" element={<PurchaseOrder/>}>
+       </Route>
+           <Route path="sales/purchaseOrder/created" element={<PurchaseOrderCreation/>}/>
        <Route path="viewOrder" element={<ViewOrder/>}/>
        <Route path="materials" element={<MaterialView/>}/>
        
@@ -50,6 +53,10 @@ function App() {
     <>
       <Provider store={store}>
         <RouterProvider router={router}/>
+        <ToastContainer
+       position="top-center"
+       autoClose={1000}
+      />
       </Provider>
     </>
   );
