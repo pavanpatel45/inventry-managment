@@ -14,8 +14,7 @@ import leftArrow from '../Icons/leftArrow.png'
 import rightArrow from '../Icons/rightArrow.png'
 import NavbarSideIcon from './NavbarSideIcon'
 import NavbarSideIconOpen from './NavbarSideIconOpen'
-export default function NavbarSide() {
-  const [active,setActive] = useState(false);
+export default function NavbarSide({active,setActive}) {
   const toggleSideBar = () => {
      setActive((prev) => !prev);
   }
@@ -26,9 +25,9 @@ export default function NavbarSide() {
              <img src={active?leftArrow:rightArrow}/>
           </div>
           <div className=' w-full flex justify-center pt-2 pb-2 ' ><img src={icon1}/></div>
-          <NavLink to="/product">{active?<NavbarSideIconOpen src={icon2} tittle="Product"/>:<NavbarSideIcon src={icon2}/>}</NavLink>
+          <NavLink to="/products">{active?<NavbarSideIconOpen src={icon2} tittle="Product"/>:<NavbarSideIcon src={icon2}/>}</NavLink>
           {active?<NavbarSideIconOpen src={icon3} tittle="Inventory"/>:<NavbarSideIcon src={icon3}/>}
-          {active?<NavbarSideIconOpen src={icon4} tittle="Materials"/>:<NavbarSideIcon src={icon4}/>}
+          <NavLink to="/materials">{active?<NavbarSideIconOpen src={icon4} tittle="Materials"/>:<NavbarSideIcon src={icon4}/>}</NavLink>
           <NavLink to="/sales">{active?<NavbarSideIconOpen src={icon5} tittle="Sales" />:<NavbarSideIcon src={icon5} leftBorder={{borderLeft:`(page==='/sales'`}}/>}</NavLink>
           {active?<NavbarSideIconOpen src={icon6} tittle="Documents"/>:<NavbarSideIcon src={icon6}/>}
           {active?<NavbarSideIconOpen src={icon7} tittle="Analytics"/>:<NavbarSideIcon src={icon7}/>}

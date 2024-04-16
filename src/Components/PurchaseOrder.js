@@ -1,11 +1,12 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 // import { addMakeOrder } from "../features/makeOrderSlice";
+import { useForm } from "react-hook-form";
 import InputBox from "./InputBox";
 import Dropdown from "./Dropdown";
 import Navbar from "./NavbarForm";
 import Button from "./Button";
 import AddedMaterialsTable from "./AddedMaterialsTable";
-import { Link } from "react-router-dom";
 
 export default function PurchaseOrder() {
   const buttonStyle = {
@@ -39,8 +40,7 @@ export default function PurchaseOrder() {
           <Navbar
             title="Purchase Order"
             //   buttonStyle={buttonStyle}
-            btnTitle="Save"
-            link='created'
+            btnTitle="Next"
           />
           <div className="grid gap-y-4 pt-8">
             <div className="grid gap-2">

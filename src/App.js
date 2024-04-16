@@ -10,7 +10,7 @@ import "../src/CSS/dropdownCss.css";
 import NavbarSide from "./Components/NavbarSide";
 import NavbarTop from "./Components/NavbarTop";
 import ViewOrder from "./pages/orders/ViewOrder";
-import InProgressOrder from "./pages/orders/InProgressOrder";
+import InProgressOrder from "./Components/InProgressOrder";
 import NewOrderRequest from "./Components/NewOrderRequest";
 import PendingOrder from "./Components/PendingOrder";
 import NavbarMaterials from "./Components/NavbarMaterials";
@@ -19,33 +19,39 @@ import MakeOrder from './Components/MakeOrder'
 import ShippedOrder from "./Components/ShippedOrder";
 import CompletedOrder from "./Components/CompletedOrder";
 import CancelledOrder from "./Components/CancelledOrder";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 import MaterialView from "./pages/Material/MaterialView";
 import RootLayout from "./Layout/RootLayout";
 import SalesLayout from "./Layout/SalesLayout";
+import CreateBatch from './pages/Material/CreateBatch'
+import AddNewMaterial from "./pages/Material/AddNewMaterial";
+import ProductView from "./pages/Product/ProductView";
 import PurchaseOrder from './Components/PurchaseOrder'
-import PurchaseOrderCreation from "./Components/PurchaseOrderCreation";
-
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout/>}>
        <Route index   />
        <Route path="sales" element={<SalesLayout/>}>
-            <Route path="NewOrderRequest" element={<NewOrderRequest  />} />
+            <Route index  element={<NewOrderRequest  />} />
             <Route path="Pending" element={<PendingOrder />} />
             <Route path="InProgress" element={<InProgressOrder  />} />
             <Route path="Shipped" element={<ShippedOrder  />} />
             <Route path="Completed" element={<CompletedOrder  />} />
             <Route path="Cancelled" element={<CancelledOrder  />} />
        </Route>
-       <Route path="sales/purchaseOrder" element={<PurchaseOrder/>}>
-       </Route>
-           <Route path="sales/purchaseOrder/created" element={<PurchaseOrderCreation/>}/>
-       <Route path="viewOrder" element={<ViewOrder/>}/>
-       <Route path="materials" element={<MaterialView/>}/>
-       
-      </Route>
+       <Route path="sales/purchaseOrder" element={<PurchaseOrder/>}/>
+       <Route path="sales/viewOrder" element={<ViewOrder/>}/>
+       <Route path="materials" >
+            <Route index element={<MaterialView/>}/>
+            <Route path="CreateBatch" element={<CreateBatch/>}/>
+            <Route path="AddMaterial" element={<AddNewMaterial/>}/>
+        </Route>
+        <Route path="products">
+           <Route index element={<ProductView/>}/>
+        </Route>
+    </Route>
+
     )
 )
 function App() {
@@ -53,10 +59,6 @@ function App() {
     <>
       <Provider store={store}>
         <RouterProvider router={router}/>
-        <ToastContainer
-       position="top-center"
-       autoClose={1000}
-      />
       </Provider>
     </>
   );

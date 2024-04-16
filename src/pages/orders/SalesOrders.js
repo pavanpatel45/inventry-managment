@@ -5,7 +5,7 @@ import OrderBox from "../../Components/OrderBox";
 import NavbarForm from "../../Components/NavbarForm";
 import NavbarSales from "../../Components/NavbarSales";
 import FooterPagination from "../../Components/FooterPagination";
-import InProgressOrder from "./InProgressOrder";
+import InProgressOrder from "../../Components/InProgressOrder";
 import NewOrderRequest from "../../Components/NewOrderRequest";
 import PendingOrder from "../../Components/PendingOrder";
 import ShippedOrder from "../../Components/ShippedOrder";
@@ -21,14 +21,7 @@ export default function SalesOrders() {
         
         {/* Navbar for order status Ends here*/}
         <div className="grid grid-cols-1 p-3">
-          <Routes>
-            <Route path="/NewOrderRequest" element={<NewOrderRequest  />} />
-            <Route path="/Pending" element={<PendingOrder />} />
-            <Route path="/InProgress" element={<InProgressOrder  />} />
-            <Route path="/Shipped" element={<ShippedOrder  />} />
-            <Route path="/Completed" element={<CompletedOrder  />} />
-            <Route path="/Cancelled" element={<CancelledOrder  />} />
-          </Routes>
+ 
         </div>
       </div>
       <div className="px-3 ">

@@ -1,29 +1,24 @@
 import React,{useState} from "react";
+import {Link} from 'react-router-dom'
 import Box from "./Box";
 import Button from './Button'
 import search from '../Icons/search.png'
 import exprt from '../Icons/export.png'
 import loc from '../Icons/location.png'
 import downArrow from '../Icons/down-arrow.png'
-import {  toast } from "react-toastify";
-
-
 export default function NavbarMaterials({
-  className,title
+  className,
 }) {
   const [exportOption, setExportOption] = useState("");
 
   const handleChange = (e) => {
     setExportOption(e.target.value);
   };
-
-  const notify = () => toast.success("Purchase Order Successfully Created" );
-
   return (
-    <div className="flex flex-row justify-between items-center  mt-8">
-      <div className="flex flex-row gap-2 ml-4">
+    <div className="flex flex-row justify-between items-center py-2">
+      <div className="flex flex-row gap-2 ">
         <div>&larr;</div>
-        <div className="font-medium">{title}</div>
+        <div className="font-medium">Materials View</div>
       </div>
 
       <div className="flex justify-end">
@@ -78,12 +73,11 @@ export default function NavbarMaterials({
           options={["EXCEL", "CSV", "PDF"]}
         />
 
-        <Button
+       <Link to="CreateBatch"> <Button
           btnTitle={"Add +"}
-          onClick={notify}
           // className="p-2 border-1 border-solid border-black rounded-md pt-0 pb-0"
           // style={buttonStyle}
-        />
+        /></Link>
       </div>
     </div>
   );

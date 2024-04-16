@@ -100,7 +100,7 @@ export default function OrderBox({ order, key, handleChangeStatus }) {
               className="  my-1 mx-1 py-2 rounded-md orderBoxButton "
               style={{ border: "1px solid #2CAE66", color: "#2CAE66" }}
             >
-              <Link to="/viewOrder" state={order}>
+              <Link to="/sales/viewOrder" state={order}>
                 View Order
               </Link>
             </button>
