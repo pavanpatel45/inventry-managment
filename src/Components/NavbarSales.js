@@ -18,8 +18,7 @@ export default function NavbarSales({ title, handleCreateOrder }) {
       <div className="flex flex-box gap-2">
         <div
           className="rounded-full w-8 h-8 flex items-center justify-center navbarSalesButton"
-          style={{ backgroundColor: "#EFEFEF" }}
-        >
+          style={{ backgroundColor: "#EFEFEF" }}>
           <img src={search} height="16px" width="16px" />
         </div>
         <div
@@ -47,8 +46,8 @@ export default function NavbarSales({ title, handleCreateOrder }) {
             +
           </span>
           <div className="relative top-16 right-28">
-          {showDropdown && <OrderDropdown />}
-        </div>
+            {showDropdown && <OrderDropdown />}
+          </div>
         </div>
       </div>
     </div>
